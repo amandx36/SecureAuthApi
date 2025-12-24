@@ -43,7 +43,7 @@ public class OTP {
 
     // function to check is the otp is expired dude !!
     public boolean isExpired() {
-        return LocalDateTime.now().isAfter(expiresAt);
+        return  expiresAt != null && LocalDateTime.now().isAfter(expiresAt);
     }
 
     // function to check is the otp is valid or not
