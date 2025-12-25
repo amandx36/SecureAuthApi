@@ -188,3 +188,11 @@ JpaRepository CRUD, pagination(Large data ko chhote-chhote pages me todna) aur s
 ```java
 Optional<User> findByEmail(String email);
 ```
+
+
+How to write the jpl query simple know this rule dude 
+Action      → findBy / deleteBy / existsBy
+Field names → Entity field names
+Conditions  → And / Or / True / False
+Sorting     → OrderBy<Field><Asc/Desc>
+Limit       → First / Top
