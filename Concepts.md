@@ -145,3 +145,46 @@ GitHub may return null email → fallback used.
 ### One-LineSummary
 
 OAuth2UserInfo converts provider-specific OAuth responses into a unified user representation using factory methods.
+
+# UserRepository – Interview Short Notes
+
+## What is UserRepository?
+
+- Persistence(Database main store karna ) / DAO(Data Access object {This layer is responsible for taking to database } ) layer
+- Handles database operations for User entity
+
+**Interview:**  
+UserRepository User entity ke CRUD operations manage karta hai.
+
+---
+
+## JpaRepository<User, Long>
+
+- User → Entity class
+- Long → Primary key type
+- Provides built-in methods:
+  - save()
+  - findById()
+  - findAll()
+  - deleteById()
+
+**Interview:**  
+JpaRepository CRUD, pagination(Large data ko chhote-chhote pages me todna) aur sorting provide karta hai.
+
+---
+
+## @Repository
+
+- Marks class as repository bean
+- Converts DB exceptions into Spring exceptions
+
+**Interview:**  
+@Repository persistence layer ko identify karta hai.
+
+---
+
+## findByEmail
+
+```java
+Optional<User> findByEmail(String email);
+```
