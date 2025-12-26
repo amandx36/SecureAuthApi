@@ -66,7 +66,7 @@ private  String generateRandomOTP(int x ){
 
         // check is the otp  empty
         if(otpOptional.isEmpty()){
-            System.out.println("OTP not found for "+email+"!!");
+        //     System.out.println("OTP not found for "+email+"!!");
             return false ;
 
 
@@ -75,14 +75,14 @@ private  String generateRandomOTP(int x ){
         OTP otp = otpOptional.get();
         // checking otp is expired or not
         if(otp.isExpired()){
-            System.out.println("OTP is expired for email "+email+"!!");
+          //   System.out.println("OTP is expired for email "+email+"!!");
             return false ;
 
         }
         // marked this otp is used
         otp.setUsed(true);
         otpRepository.save(otp);
-        System.out.println("otp verified");
+     //   System.out.println("otp verified");
         return  true ;
 
     }
