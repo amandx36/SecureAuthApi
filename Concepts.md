@@ -196,3 +196,9 @@ Field names → Entity field names
 Conditions  → And / Or / True / False
 Sorting     → OrderBy<Field><Asc/Desc>
 Limit       → First / Top
+
+
+JWT Token
+├─ Header   (type + algorithm)
+├─ Payload  (userId, email, provider)
+└─ Signature (server ka secret)
