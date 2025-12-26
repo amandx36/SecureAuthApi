@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome to SecureAuth Pro</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            line-height: 1.6;
+            color: #333333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+        }
+
+        .container {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            padding: 30px;
+        }
+
+        .content {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            margin-top: 20px;
+            color: #333333;
+        }
+
+        .welcome-text {
+            font-size: 22px;
+            color: #4F46E5;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        p {
+            font-size: 15px;
+            margin: 12px 0;
+        }
+
+        .features {
+            margin: 20px 0;
+            padding-left: 20px;
+        }
+
+        .features li {
+            margin: 10px 0;
+            font-size: 15px;
+        }
+
+        .button {
+            display: inline-block;
+            background-color: #4F46E5;
+            color: #ffffff !important;
+            padding: 12px 30px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 20px 0;
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .footer {
+            margin-top: 25px;
+            font-size: 13px;
+            color: #555555;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <div class="content">
+
+        <div class="welcome-text">
+            Welcome to SecureAuth Pro, <span th:text="${name}"></span>
+        </div>
+
+        <p>
+            Thank you for registering with SecureAuth Pro.
+            Your email has been successfully verified, and your account is now active.
+        </p>
+
+        <p>
+            With your SecureAuth Pro account, you can:
+        </p>
+
+        <ul class="features">
+            <li>Securely log in using One-Time Password (OTP) verification</li>
+            <li>Authenticate using Google or GitHub OAuth</li>
+            <li>Manage your profile with enhanced security</li>
+            <li>Receive important security-related notifications</li>
+        </ul>
+
+        <p>
+            You can now access your account using the link below:
+        </p>
+
+        <a href="http://localhost:3000/login" class="button">
+            Access Your Account
+        </a>
+
+        <p>
+            If you have any questions or need assistance, please contact our support team.
+        </p>
+
+        <p>
+            Regards,<br>
+            <strong>SecureAuth Team</strong>
+        </p>
+
+        <div class="footer">
+            <p>This is an automated message. Please do not reply.</p>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

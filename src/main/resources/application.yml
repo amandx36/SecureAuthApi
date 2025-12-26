@@ -1,0 +1,93 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+spring:
+  application:
+    name: secureauth-oauth2
+
+  # MariaDB Configuration
+  datasource:
+    url: jdbc:mariadb://localhost:3306/auth_oauth2
+    username: root
+    password: password123
+    driver-class-name: org.mariadb.jdbc.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  # OAuth2 Configuration
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID:your-google-client-id}
+            client-secret: ${GOOGLE_CLIENT_SECRET:your-google-client-secret}
+            scope: profile,email
+            redirect-uri: "{baseUrl}/oauth2/callback/{registrationId}"
+            authorization-grant-type: authorization_code
+            client-name: Google
+
+          github:
+            client-id: ${GITHUB_CLIENT_ID:your-github-client-id}
+            client-secret: ${GITHUB_CLIENT_SECRET:your-github-client-secret}
+            scope: user:email,read:user
+            redirect-uri: "{baseUrl}/oauth2/callback/{registrationId}"
+            authorization-grant-type: authorization_code
+            client-name: GitHub
+
+  # Email Configuration (Gmail)
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${EMAIL_USERNAME:your-email@gmail.com}
+    password: ${EMAIL_PASSWORD:your-app-password}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+        debug: false
+
+  # Thymeleaf for email templates
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML
+    encoding: UTF-8
+    cache: false
+
+# JWT Configuration
+jwt:
+  secret: YourSuperSecretKeyForJWT1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ
+  expiration: 86400000 # 24 hours
+
+# Frontend URL for OAuth2 redirect
+frontend:
+  url: http://localhost:3000
+
+# Swagger
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+
+# Logging
+logging:
+  level:
+    com.auth: DEBUG
+    org.springframework.security: INFO
