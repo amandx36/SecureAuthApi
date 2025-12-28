@@ -107,6 +107,7 @@ private PasswordEncoder passwordEncoder;
 
     }
     // function for logIn with otp
+    @Transactional
     public  String login (String email , String password){
 
         // 1 find user by email
