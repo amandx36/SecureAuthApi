@@ -998,7 +998,6 @@ Version: 1.0.0
 Last Updated: December 31, 2025
 Status: Production Ready
 
-Built by Aman Deep
 
                                      I don’t just write code — I orbit ideas until they ignite.   
 
