@@ -62,10 +62,17 @@ SecureAuth API is an enterprise-grade authentication microservice that provides 
 - Non-blocking email dispatch
 - Thymeleaf-based dynamic email templates
 
+**API Documentation**
+- Interactive Swagger UI for endpoint exploration
+- OpenAPI 3.0 specification
+- Real-time API documentation
+- Request/response examples
+
 **Developer Experience**
 - Health monitoring endpoint
 - Debug-level logging for troubleshooting
 - Comprehensive exception handling with meaningful responses
+- Swagger/OpenAPI integration for documentation
 
 ### Planned Features (Roadmap)
 
@@ -86,6 +93,7 @@ SecureAuth API is an enterprise-grade authentication microservice that provides 
 | Database | MariaDB | 10.11+ |
 | ORM | JPA/Hibernate | 3.1.5 |
 | Token | JWT (JJWT) | 0.11.5 |
+| API Documentation | SpringDoc OpenAPI | 2.1.0 |
 | Build | Maven | 3.8+ |
 | Java | OpenJDK | 17+ |
 | Email | Spring Mail + Thymeleaf | 3.1.5 |
@@ -356,6 +364,15 @@ logging:
   level:
     com.auth: DEBUG
     org.springframework.security: INFO
+
+# SPRINGDOC OPENAPI CONFIGURATION
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: method
+    tags-sorter: alpha
+  api-docs:
+    path: /v3/api-docs
 ```
 
 ---
@@ -386,22 +403,40 @@ export $(cat .env | xargs) && mvn spring-boot:run
 
 ### Verify Application Started
 
-Once running, you should see:
+Once running, you should see output indicating the application has successfully initialized. The application will be accessible at:
 
 ```
-============================================
-SECUREAUTH OAUTH2 + OTP SYSTEM STARTED!
-============================================
-Local Server: http://localhost:8083
-Email OTP: READY
-Google OAuth2: READY
-GitHub OAuth2: READY
-============================================
+Application URL: http://localhost:8083
+Swagger UI: http://localhost:8083/swagger-ui.html
+API Documentation: http://localhost:8083/v3/api-docs
+Health Check: http://localhost:8083/api/auth/health
 ```
 
 ---
 
 ## API Documentation
+
+### Accessing Swagger UI
+
+Once the application is running, navigate to the interactive API documentation:
+
+```
+http://localhost:8083/swagger-ui.html
+```
+
+This provides an interactive interface where you can:
+- Explore all available endpoints
+- View request and response schemas
+- Test API endpoints directly
+- Download OpenAPI specification
+
+### OpenAPI Specification
+
+The complete OpenAPI specification is available at:
+
+```
+http://localhost:8083/v3/api-docs
+```
 
 ### Base URL
 
@@ -413,7 +448,9 @@ http://localhost:8083
 
 #### Register User
 
-POST /api/auth/register
+**POST** `/api/auth/register`
+
+Registers a new user and sends an OTP to their email.
 
 Request:
 ```json
@@ -434,7 +471,9 @@ Response (200 OK):
 
 #### Verify Registration OTP
 
-POST /api/auth/verify-registration
+**POST** `/api/auth/verify-registration`
+
+Verifies the OTP sent during registration.
 
 Request:
 ```json
@@ -454,7 +493,9 @@ Response (200 OK):
 
 #### Login User
 
-POST /api/auth/login
+**POST** `/api/auth/login`
+
+Initiates login and sends OTP to user's email.
 
 Request:
 ```json
@@ -474,7 +515,9 @@ Response (200 OK):
 
 #### Verify Login OTP
 
-POST /api/auth/verify-login
+**POST** `/api/auth/verify-login`
+
+Verifies login OTP and returns authentication token.
 
 Request:
 ```json
@@ -495,7 +538,9 @@ Response (200 OK):
 
 #### Get User Profile
 
-GET /api/auth/profile?email=user@example.com
+**GET** `/api/auth/profile?email=user@example.com`
+
+Retrieves user profile information.
 
 Response (200 OK):
 ```json
@@ -514,7 +559,9 @@ Response (200 OK):
 
 #### Health Check
 
-GET /api/auth/health
+**GET** `/api/auth/health`
+
+Returns service health status.
 
 Response (200 OK):
 ```json
@@ -529,7 +576,9 @@ Response (200 OK):
 
 #### Get OAuth2 Configuration
 
-GET /api/oauth2/config
+**GET** `/api/oauth2/config`
+
+Returns OAuth2 provider configuration.
 
 Response (200 OK):
 ```json
@@ -548,19 +597,28 @@ Response (200 OK):
 
 #### Google OAuth2 Login
 
-GET /oauth2/authorization/google
+**GET** `/oauth2/authorization/google`
 
-Redirects to Google login. After authentication, redirects to frontend callback with JWT token.
+Redirects to Google authentication. After successful authentication, redirects to frontend callback with JWT token.
 
 #### GitHub OAuth2 Login
 
-GET /oauth2/authorization/github
+**GET** `/oauth2/authorization/github`
 
-Redirects to GitHub login. After authentication, redirects to frontend callback with JWT token.
+Redirects to GitHub authentication. After successful authentication, redirects to frontend callback with JWT token.
 
 ---
 
 ## Testing
+
+### Using Swagger UI
+
+1. Navigate to http://localhost:8083/swagger-ui.html
+2. Click on any endpoint to expand it
+3. Click "Try it out"
+4. Enter request parameters and body
+5. Click "Execute"
+6. View response and status code
 
 ### Using cURL
 
@@ -618,15 +676,9 @@ curl -X GET http://localhost:8083/api/auth/health
 ### Using Postman
 
 1. Download Postman (https://www.postman.com/downloads/)
-2. Create new collection
-3. Add requests:
-   - POST http://localhost:8083/api/auth/register
-   - POST http://localhost:8083/api/auth/verify-registration
-   - POST http://localhost:8083/api/auth/login
-   - POST http://localhost:8083/api/auth/verify-login
-   - GET http://localhost:8083/api/auth/profile
-4. Copy JSON bodies from API documentation
-5. Send and check responses
+2. Import OpenAPI specification from http://localhost:8083/v3/api-docs
+3. Create and test requests using the imported collection
+4. Use Swagger UI for quick testing without configuration
 
 ---
 
@@ -647,7 +699,7 @@ scp .env user@yourserver.com:/home/app/
 
 **Step 3: Create Service File**
 
-Create /etc/systemd/system/secureauth.service:
+Create `/etc/systemd/system/secureauth.service`:
 
 ```ini
 [Unit]
@@ -725,6 +777,7 @@ tail -f app.log
 - [ ] Update FRONTEND_URL to production domain
 - [ ] Enable HTTPS/SSL on domain
 - [ ] Configure firewall to allow port 8083 only to reverse proxy
+- [ ] Disable Swagger UI in production (set `springdoc.swagger-ui.enabled=false`)
 - [ ] Set up automated database backups
 - [ ] Enable logging and monitoring
 - [ ] Test OAuth2 redirect URIs with production domain
@@ -732,7 +785,7 @@ tail -f app.log
 
 ### Nginx Reverse Proxy
 
-Create /etc/nginx/sites-available/secureauth:
+Create `/etc/nginx/sites-available/secureauth`:
 
 ```nginx
 server {
@@ -765,6 +818,18 @@ sudo nginx -t
 sudo systemctl restart nginx
 ```
 
+### Disabling Swagger UI in Production
+
+Add to `application.yml`:
+
+```yaml
+springdoc:
+  swagger-ui:
+    enabled: false
+  api-docs:
+    enabled: false
+```
+
 ---
 
 ## Security Considerations
@@ -791,6 +856,11 @@ sudo systemctl restart nginx
 - Gmail app passwords used (not account passwords)
 - OTP codes sent via encrypted email
 
+### API Documentation Security
+- Disable Swagger UI in production environments
+- Restrict API documentation access to authorized users only
+- Use environment-specific configurations
+
 ### Best Practices
 1. Change default secret keys before production
 2. Use environment variables for all secrets
@@ -802,6 +872,8 @@ sudo systemctl restart nginx
 8. Use strong database passwords
 9. Enable database encryption
 10. Set up automated backups
+11. Disable Swagger UI and API documentation endpoints in production
+12. Implement API authentication for sensitive endpoints
 
 ---
 
@@ -812,12 +884,13 @@ sudo systemctl restart nginx
 - Google and GitHub OAuth2
 - JWT token generation
 - User profile management
+- Swagger UI API documentation
 
 ### Phase 2 (Planned)
-1. **Refresh Token System** - Implement refresh tokens for extended sessions with automatic token rotation
-2. **Account Linking** - Allow users to link multiple OAuth2 accounts to single profile
-3. **Rate Limiting** - Prevent brute force attacks on login and OTP endpoints
-4. **Audit Logs & Error Handling** - Comprehensive audit trail and improved error tracking
+1. Refresh Token System - Implement refresh tokens for extended sessions with automatic token rotation
+2. Account Linking - Allow users to link multiple OAuth2 accounts to single profile
+3. Rate Limiting - Prevent brute force attacks on login and OTP endpoints
+4. Audit Logs & Error Handling - Comprehensive audit trail and improved error tracking
 
 ### Phase 3 (Future)
 - Two-factor authentication with authenticator apps
@@ -843,6 +916,14 @@ mvn spring-boot:run
 # Or single command
 export $(cat .env | xargs) && mvn spring-boot:run
 ```
+
+### Swagger UI Not Loading
+
+Solution:
+- Verify application is running on http://localhost:8083
+- Check that springdoc-openapi-starter-webmvc-ui is in pom.xml
+- Ensure port 8083 is not blocked by firewall
+- Check logs for configuration errors
 
 ### Email Not Sending
 
@@ -914,9 +995,10 @@ This project is licensed under MIT License. See LICENSE file for details.
 ## Version
 
 Version: 1.0.0
-Last Updated: December 28, 2025
+Last Updated: December 31, 2025
 Status: Production Ready
 
+Built by Aman Deep
 
                                      I don’t just write code — I orbit ideas until they ignite.   
 
